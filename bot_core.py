@@ -83,7 +83,6 @@ if __name__ == "__main__":
             \nI am a bot that sniffs out spammers, this smells like SPAM.
             \nMost submissions from /u/{} appear to be SPAM.
             \nIf someone tells you to send crypto to a wallet link and they will send back double, DON'T SEND ANY CRYPTO.
-            \nMay the Force be with you.
             \n*Beep Bop*""".format(spam_details[i][2])  
             try:
                 with open("posted_urls.txt","r") as f:
