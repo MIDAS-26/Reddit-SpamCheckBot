@@ -13,6 +13,8 @@ reddit = praw.Reddit(client_id = "{}".format((lines[0]).strip()),
                      user_agent = "{}".format((lines[4]).strip()))
 
 spamwords = ["free udemy", "free course", "discount", "coupon", "free", "save"]
+spam_warnu = []
+spam_warnid = []
 
 
 def spamcheck(kw):
@@ -61,13 +63,32 @@ if __name__ == "__main__":
                     if str(author) not in spam_scorel:
                         print("{}'s Spam Score is: {}".format(author, spam_score))
                         spam_authors[str(author)] = [spam_score, post_total]
-                        spam_scorel.append(str(author))
+                        spam_scorel.append((str(author), spam_score))
                         for links in spam_links:
                             spam_details.append(links)
+                        
                     
-            except:
-                print(author)
-                    
+            except Exception as e:
+                print("From", author, e)
+                
+
+        for i in range(len(spam_details)):
+            if spam_details[i][2] not in spam_warnu:
+                spam_warnu.append(spam_details[i][2])
+                spam_warnid.append(spam_details[i][0])
+                
+            submission = reddit.submission(id = spam_details[i][0])
+            link = "https://reddit.com"+submission.permalink
+            message = """*Beep Bop*
+            I am a bot that sniffs out spammers/cheaters, this smells like SPAM.
+            Submissions from /u/{} appear to be SPAM.
+            *Beep Bop*""".format(spam_details[i][2])  
+
+
+        
+        
+
+                  
 
 
 
