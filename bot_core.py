@@ -3,7 +3,7 @@ import time
 import random
 import keyboard
 
-f = open("D://Github Details//basic-reddit-bot_details.txt","r")
+f = open("basic-reddit-bot_details.txt","r")
 lines = f.readlines()
 
 reddit = praw.Reddit(client_id = "{}".format((lines[0]).strip()),
