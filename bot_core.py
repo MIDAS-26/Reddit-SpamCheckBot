@@ -12,21 +12,21 @@ reddit = praw.Reddit(client_id = "{}".format((lines[0]).strip()),
                      password = "{}".format((lines[3]).strip()),
                      user_agent = "{}".format((lines[4]).strip()))
 
-spamwords = ["free udemy", "free course", "discount", "coupon", "free", "save"]
+spamwords = ["free cryptocurrency", "free crypto", "you send", "we send double", "free", "free money", "giveaway crypto", "get double crypto", "free cash", "free bitcoin"]
 spam_warnu = []
 spam_warnid = []
 
 
 def spamcheck(kw):
     authorl = []
-    for submission in reddit.subreddit("all").search(kw, sort = "new", limit = 10):
+    for submission in reddit.subreddit("all").search(kw, sort = "new", limit = 30):
         if submission.author not in authorl:
             authorl.append(submission.author)
     return authorl
 
 if __name__ == "__main__":
     while True:
-        keyword = random.choice(["free udemy", "free course"])
+        keyword = random.choice(["free crypto", "get double crypto", "free cash", "free bitcoin", "referral", "free money"])
         sus_authors = spamcheck(keyword)
         spam_authors = {}
         spam_details = []
@@ -59,7 +59,7 @@ if __name__ == "__main__":
                     spam_score = 0
                 
 
-                if spam_score>=0.3:
+                if spam_score>=0.4:
                     if str(author) not in spam_scorel:
                         print("{}'s Spam Score is: {}".format(author, spam_score))
                         spam_authors[str(author)] = [spam_score, post_total]
@@ -80,9 +80,26 @@ if __name__ == "__main__":
             submission = reddit.submission(id = spam_details[i][0])
             link = "https://reddit.com"+submission.permalink
             message = """*Beep Bop*
-            I am a bot that sniffs out spammers/cheaters, this smells like SPAM.
-            Submissions from /u/{} appear to be SPAM.
-            *Beep Bop*""".format(spam_details[i][2])  
+            \nI am a bot that sniffs out spammers, this smells like SPAM.
+            \nMost submissions from /u/{} appear to be SPAM.
+            \nIf someone tells you to send crypto to a wallet link and they will send back double, DON'T SEND ANY CRYPTO.
+            \nMay the Force be with you.
+            \n*Beep Bop*""".format(spam_details[i][2])  
+            try:
+                with open("posted_urls.txt","r") as f:
+                    already_posted = f.read().split("\n")
+                if link not in already_posted:
+                    print(message)
+                    submission.reply(message)
+                    print("Posted to {}, now sleeping for 12 minutes.".format(link))
+                    with open("posted_urls.txt", "a") as f:
+                        f.write(link+"\n")
+                    time.sleep(12*60)
+                    break
+            except Exception as e:
+                print(e)
+                time.sleep(12*60)
+
 
 
         
