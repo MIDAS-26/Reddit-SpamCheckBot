@@ -18,18 +18,19 @@ spamwords = ["free udemy", "free course", "discount", "coupon", "free", "save"]
 def spamcheck(kw):
     authorl = []
     for submission in reddit.subreddit("all").search(kw, sort = "new", limit = 10):
-        if str(submission.author) not in authorl:
-            authorl.append(str(submission.author))
+        if submission.author not in authorl:
+            authorl.append(submission.author)
     return authorl
 
 if __name__ == "__main__":
-    keyword = random.choice(["free udemy", "free course"])
-    sus_authors = spamcheck(keyword)
-    spam_authors = {}
-    spam_details = []
-    spam_scorel = []
-
     while True:
+        keyword = random.choice(["free udemy", "free course"])
+        sus_authors = spamcheck(keyword)
+        spam_authors = {}
+        spam_details = []
+        spam_scorel = []
+
+
         for author in sus_authors:
             spam_links = []
             post_total = 0
@@ -42,7 +43,7 @@ if __name__ == "__main__":
                     post_id = post.id
                     spam = False
                     for kw in spamwords:
-                        if kw in post.title:
+                        if kw in post.title.lower():
                             spam = True
                             junk = [post_id, post_title, str(author)]
                             if junk not in spam_links:
@@ -65,14 +66,7 @@ if __name__ == "__main__":
                             spam_details.append(links)
                     
             except:
-                # print(author)
-                break
-            #     for i in range(len(spam_links)):
-            #         if str(author) not in spam_links[i]:
-            #             spam_links.append(["blocked", "blocked", str(author)])
-            #             print("From {}: ".format(author))
-            #     break
-                   
+                print(author)
                     
 
 
